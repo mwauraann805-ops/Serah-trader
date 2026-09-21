@@ -1,165 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serah Trader</title>
 
-<title>Serah Trader</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b1020;
+            color: white;
+            text-align: center;
+        }
 
-<style>
-* {
-    box-sizing: border-box;
-}
+        .header {
+            padding: 30px 20px;
+        }
 
-body 
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b1020;
-    color: white;
-}
+        h1 {
+            margin-bottom: 10px;
+        }
 
-.header {
-    padding: 20px;
-    background: #11182d;
-    text-align: center;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 28px;
-}
-
-.header p {
-    margin: 8px 0 0;
-    color: #aab3c5;
-}
-
-.container {
-    padding: 20px;
-    max-width: 600px;
-    margin: auto;
-}
-
-.balance,
-.market,
-.trade-box {
-    background: #151e38;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-}
-
-.balance-title,
-.status {
-    color: #aab3c5;
-    font-size: 14px;
-}
-
-.balance-amount {
-    font-size: 32px;
-    font-weight: bold;
-    margin-top: 8px;
-}
-
-.market h2,
-.trade-box h2 {
-    margin-top: 0;
-}
-
-.price {
-    font-size: 28px;
-    font-weight: bold;
-    margin: 15px 0;
-}
-
-.buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-button {
-    padding: 16px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-}
-
-.rise {
-    background: #16834b;
-}
-
-.fall {
-    background: #c53b4b;
-}
-
-.over {
-    background: #315fc4;
-}
-
-.under {
-    background: #7a45bd;
-}
-
-.connect {
-    width: 100%;
-    margin-top: 15px;
-    background: #f0a500;
-    color: #111;
-}
-
-.note {
-    text-align: center;
-    color: #8993a8;
-    font-size: 13px;
-    margin-top: 20px;
-}
-</style>
+        .connect {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="header">
-    <h1>Serah Trader</h1>
-    <p>Trading Dashboard</p>
-</div>
+    <div class="header">
+        <h1>Serah Trader</h1>
+        <p>Deriv Trading Dashboard</p>
 
-<div class="container">
-
-    <div class="balance">
-        <div class="balance-title">Demo Balance</div>
-        <div class="balance-amount">$0.00</div>
+        <button class="connect">CONNECT DERIV</button>
     </div>
-
-    <div class="market">
-        <h2>Market</h2>
-        <div class="status">Waiting for market data...</div>
-        <div class="price">---</div>
-        <div class="status">Deriv connection: Not connected</div>
-    </div>
-
-    <div class="trade-box">
-        <h2>Trade Options</h2>
-
-        <div class="buttons">
-            <button class="rise">RISE</button>
-            <button class="fall">FALL</button>
-            <button class="over">OVER</button>
-            <button class="under">UNDER</button>
-        </div>
-
-        <button class="connect">
-            CONNECT DERIV
-        </button>
-    </div>
-
-    <div class="note">
-        Demo dashboard — trading functions will be connected later.
-    </div>
-
-</div>
 
 </body>
 </html>
