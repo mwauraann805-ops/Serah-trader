@@ -7,33 +7,84 @@
 <title>Serah Trader</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #0b1020;
+    background: #081020;
     color: white;
     text-align: center;
 }
 
 .header {
-    padding: 40px 20px;
+    padding: 30px 15px;
 }
 
 h1 {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+}
+
+.card {
+    width: 92%;
+    max-width: 450px;
+    margin: 15px auto;
+    padding: 20px;
+    background: #111c30;
+    border-radius: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
 .connect {
-    padding: 15px 25px;
-    border: none;
+    background: white;
+    color: black;
+}
+
+.start {
+    background: #20c997;
+    color: white;
+}
+
+.stop {
+    background: #e74c3c;
+    color: white;
+}
+
+select,
+input {
+    width: 100%;
+    padding: 13px;
+    margin-top: 8px;
     border-radius: 8px;
-    cursor: pointer;
+    border: none;
     font-size: 16px;
 }
 
-#status {
-    margin-top: 20px;
+.status {
+    margin-top: 15px;
     font-size: 16px;
+}
+
+.price {
+    font-size: 30px;
+    margin: 15px;
+}
+
+.signal {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 15px;
 }
 </style>
 </head>
@@ -41,36 +92,82 @@ h1 {
 <body>
 
 <div class="header">
-
     <h1>Serah Trader</h1>
-
     <p>Deriv Trading Dashboard</p>
+</div>
+
+<div class="card">
 
     <button class="connect" onclick="connectDeriv()">
         CONNECT DERIV
     </button>
 
-    <div id="status">
-        Not connected
+    <div id="status" class="status">
+        🔴 Not connected
     </div>
+
+</div>
+
+<div class="card">
+
+    <h2>Market</h2>
+
+    <select id="symbol">
+        <option value="R_100">Volatility 100</option>
+        <option value="R_75">Volatility 75</option>
+        <option value="R_50">Volatility 50</option>
+        <option value="R_25">Volatility 25</option>
+        <option value="R_10">Volatility 10</option>
+    </select>
+
+    <h2>Stake</h2>
+
+    <input
+        type="number"
+        id="stake"
+        value="1"
+        min="0.35"
+        step="0.01"
+    >
+
+    <div class="price">
+        Price: <span id="price">---</span>
+    </div>
+
+    <div class="signal" id="signal">
+        Signal: WAITING
+    </div>
+
+    <button class="start" onclick="startBot()">
+        ▶ START DEMO BOT
+    </button>
+
+    <button class="stop" onclick="stopBot()">
+        ■ STOP BOT
+    </button>
 
 </div>
 
 <script>
 
+let ws = null;
+let botRunning = false;
+
 function connectDeriv() {
 
     const status = document.getElementById("status");
 
-    status.innerHTML = "Connecting to Deriv...";
+    status.innerHTML = "🟡 Connecting to Deriv...";
 
-    const ws = new WebSocket(
-        "wss://api.derivws.com/trading/v1/options/ws/public"
+    ws = new WebSocket(
+        "wss://ws.derivws.com/websockets/v3?app_id=1089"
     );
 
     ws.onopen = function() {
 
         status.innerHTML = "🟢 Connected to Deriv";
+
+        subscribeTicks();
 
     };
 
@@ -82,9 +179,97 @@ function connectDeriv() {
 
     ws.onclose = function() {
 
-        status.innerHTML = "Disconnected";
+        status.innerHTML = "🔴 Disconnected";
 
     };
+
+    ws.onmessage = function(event) {
+
+        const data = JSON.parse(event.data);
+
+        if (data.tick) {
+
+            const price = data.tick.quote;
+
+            document.getElementById("price").innerText =
+                price;
+
+            if (botRunning) {
+
+                generateSignal(price);
+
+            }
+
+        }
+
+    };
+}
+
+
+function subscribeTicks() {
+
+    const symbol =
+        document.getElementById("symbol").value;
+
+    if (!ws) return;
+
+    ws.send(JSON.stringify({
+
+        ticks: symbol,
+        subscribe: 1
+
+    }));
+
+}
+
+
+function startBot() {
+
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+
+        alert("Please connect to Deriv first.");
+
+        return;
+
+    }
+
+    botRunning = true;
+
+    document.getElementById("signal").innerText =
+        "🟡 BOT RUNNING - DEMO";
+
+    subscribeTicks();
+
+}
+
+
+function stopBot() {
+
+    botRunning = false;
+
+    document.getElementById("signal").innerText =
+        "⚪ BOT STOPPED";
+
+}
+
+
+function generateSignal(price) {
+
+    const number =
+        Math.floor(price * 100) % 2;
+
+    if (number === 0) {
+
+        document.getElementById("signal").innerText =
+            "🟢 DEMO SIGNAL: EVEN";
+
+    } else {
+
+        document.getElementById("signal").innerText =
+            "🔵 DEMO SIGNAL: ODD";
+
+    }
+
 }
 
 </script>
