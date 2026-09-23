@@ -1,45 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serah Trader</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0b1020;
-            color: white;
-            text-align: center;
-        }
+<title>Serah Trader</title>
 
-        .header {
-            padding: 30px 20px;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b1020;
+    color: white;
+    text-align: center;
+}
 
-        h1 {
-            margin-bottom: 10px;
-        }
+.header {
+    padding: 40px 20px;
+}
 
-        .connect {
-            padding: 15px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-    </style>
+h1 {
+    margin-bottom: 10px;
+}
+
+.connect {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#status {
+    margin-top: 20px;
+    font-size: 16px;
+}
+</style>
 </head>
 
 <body>
 
-    <div class="header">
-        <h1>Serah Trader</h1>
-        <p>Deriv Trading Dashboard</p>
+<div class="header">
 
-        <button class="connect">CONNECT DERIV</button>
+    <h1>Serah Trader</h1>
+
+    <p>Deriv Trading Dashboard</p>
+
+    <button class="connect" onclick="connectDeriv()">
+        CONNECT DERIV
+    </button>
+
+    <div id="status">
+        Not connected
     </div>
+
+</div>
+
+<script>
+
+function connectDeriv() {
+
+    const status = document.getElementById("status");
+
+    status.innerHTML = "Connecting to Deriv...";
+
+    const ws = new WebSocket(
+        "wss://api.derivws.com/trading/v1/options/ws/public"
+    );
+
+    ws.onopen = function() {
+
+        status.innerHTML = "🟢 Connected to Deriv";
+
+    };
+
+    ws.onerror = function() {
+
+        status.innerHTML = "🔴 Connection error";
+
+    };
+
+    ws.onclose = function() {
+
+        status.innerHTML = "Disconnected";
+
+    };
+}
+
+</script>
 
 </body>
 </html>
